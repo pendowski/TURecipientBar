@@ -285,4 +285,14 @@
  */
 - (void)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller didRemoveRecipient:(nonnull id<TURecipient>)recipient;
 
+/** Tell the delegate when user requests recipient detaiks
+ 
+ Called whenever a recipient double-tapped/long-pressed to see details.
+ 
+ @param controller The recipients display controller for which the receiver is the delegate.
+ @param recipient The recipient that was requested.
+ @param sender Control that represents the recipient.
+ */
+- (void)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller didRemoveRecipient:(nonnull id<TURecipient>)recipient sender:(nonnull UIControl *)sender;
+
 @end

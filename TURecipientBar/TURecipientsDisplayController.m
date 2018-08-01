@@ -426,6 +426,13 @@ static void *TURecipientsContext = &TURecipientsContext;
 	}
 }
 
+- (void)recipientsBar:(TURecipientsBar *)recipientsBar didRequestDetailsOfRecipient:(id<TURecipient>)recipient sender:(UIControl *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(recipientsBar:didRequestDetailsOfRecipient:sender:)]) {
+        [self.delegate recipientsBar:recipientsBar didRequestDetailsOfRecipient:recipient sender:sender];
+    }
+}
+
 - (nullable UIControl *)recipientsBar:(TURecipientsBar *)recipientsBar viewForRecipient:(nonnull id<TURecipient>)recipient
 {
 	if ([self.delegate respondsToSelector:@selector(recipientsBar:viewForRecipient:)]) {

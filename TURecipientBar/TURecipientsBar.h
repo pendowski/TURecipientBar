@@ -370,6 +370,17 @@ typedef NS_ENUM(NSInteger, TURecipientsBarDisplayMode) {
  */
 - (void)recipientsBar:(nonnull TURecipientsBar *)recipientsBar didSelectRecipient:(nonnull id<TURecipient>)recipient;
 
+/** Tells the delegate that user would want to see recipient's details
+ 
+ Called when the user double taps or long presses a recipient.
+ 
+ @param recipientsBar The recipient bar that is being edited.
+ @param recipient The recipient that was selected.
+ @param sender Control that represents the recipient.
+ */
+- (void)recipientsBar:(nonnull TURecipientsBar *)recipientsBar didRequestDetailsOfRecipient:(nonnull id<TURecipient>)recipient sender:(nonnull UIControl *)sender;
+
+
 /** Tells the delegate that recipient was removed.
  
  Called when a recipient was removed

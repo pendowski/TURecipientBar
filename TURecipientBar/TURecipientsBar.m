@@ -107,10 +107,14 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 		recipientView = [self _defaultRecipientViewForRecipient:recipient];
 	}
 	
-	
-	
 	[recipientView addTarget:self action:@selector(selectRecipientButton:) forControlEvents:UIControlEventTouchUpInside];
 	
+	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
+	doubleTap.numberOfTapsRequired = 2;
+	[recipientView addGestureRecognizer:doubleTap];
+	
+	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
+	[recipientView addGestureRecognizer:longPress];
 	
 	[self addSubview:recipientView];
 	
@@ -712,6 +716,21 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	
 	if (recipientIndex != NSNotFound && [_recipients count] > recipientIndex) {
 		self.selectedRecipient = [_recipients objectAtIndex:recipientIndex];
+	}
+}
+
+- (IBAction)requestedRecepientsDetails:(UIGestureRecognizer *)recongnizer
+{
+	if (![self.recipientsBarDelegate respondsToSelector:@selector(recipientsBar:didRequestDetailsOfRecipient:sender:)]) {
+		return;
+	}
+	UIControl *sender = (UIControl *)recongnizer.view; // Basically just go get rid of Xcode warning
+	if (sender == nil) { return ; }
+	NSUInteger recipientIndex = [_recipientViews indexOfObject:sender];
+	
+	if (recipientIndex != NSNotFound && [_recipients count] > recipientIndex) {
+		self.selectedRecipient = [_recipients objectAtIndex:recipientIndex];
+		[self.recipientsBarDelegate recipientsBar:self didRequestDetailsOfRecipient:self.selectedRecipient sender:sender];
 	}
 }
 
