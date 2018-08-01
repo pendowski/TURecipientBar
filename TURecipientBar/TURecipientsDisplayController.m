@@ -428,7 +428,9 @@ static void *TURecipientsContext = &TURecipientsContext;
 
 - (void)recipientsBar:(TURecipientsBar *)recipientsBar didRequestDetailsOfRecipient:(id<TURecipient>)recipient sender:(UIControl *)sender
 {
-    if ([self.delegate respondsToSelector:@selector(recipientsBar:didRequestDetailsOfRecipient:sender:)]) {
+    if ([self.delegate respondsToSelector:@selector(recipientsDisplayController:didRequestDetailsOfRecipient:sender:)]) {
+        [self.delegate recipientsDisplayController:self didRequestDetailsOfRecipient:recipient sender:sender];
+    } else if ([self.delegate respondsToSelector:@selector(recipientsBar:didRequestDetailsOfRecipient:sender:)]) {
         [self.delegate recipientsBar:recipientsBar didRequestDetailsOfRecipient:recipient sender:sender];
     }
 }

@@ -293,6 +293,6 @@
  @param recipient The recipient that was requested.
  @param sender Control that represents the recipient.
  */
-- (void)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller didRemoveRecipient:(nonnull id<TURecipient>)recipient sender:(nonnull UIControl *)sender;
+- (void)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller didRequestDetailsOfRecipient:(nonnull id<TURecipient>)recipient sender:(nonnull UIControl *)sender;
 
 @end
