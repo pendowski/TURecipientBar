@@ -788,6 +788,10 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 
 #pragma mark - FirstResponder
 
+- (BOOL)isFirstResponder {
+	return _textField.isFirstResponder;
+}
+
 - (BOOL)canBecomeFirstResponder
 {
 	return [_textField canBecomeFirstResponder];
@@ -796,6 +800,10 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 - (BOOL)becomeFirstResponder
 {
 	return [_textField becomeFirstResponder];
+}
+
+- (BOOL)canResignFirstResponder {
+	return [_textField canResignFirstResponder];
 }
 
 - (BOOL)resignFirstResponder
