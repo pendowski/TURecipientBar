@@ -22,6 +22,7 @@ static void *TURecipientsContext = &TURecipientsContext;
 
 @synthesize alwaysShowResults = _alwaysShowResults;
 @synthesize searchResultsTableView = _searchResultsTableView;
+@synthesize searchingIndicatorView = _searchingIndicatorView;
 
 #pragma mark - Properties
 
@@ -50,6 +51,21 @@ static void *TURecipientsContext = &TURecipientsContext;
 	return _searchResultsTableView;
 }
 
+- (UIActivityIndicatorView *)searchingIndicatorView
+{
+    if (_searchingIndicatorView == nil) {
+        _searchingIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _searchingIndicatorView.hidesWhenStopped = YES;
+        [_searchingIndicatorView stopAnimating];
+        _searchingIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.searchResultsTableView addSubview:_searchingIndicatorView];
+        
+        [self updateActivityIndicatorPlacement];
+    }
+    
+    return _searchingIndicatorView;
+}
+
 - (void)_unloadTableView
 {
 	if ([self.delegate respondsToSelector:@selector(recipientsDisplayController:willUnloadSearchResultsTableView:)]) {
@@ -57,6 +73,7 @@ static void *TURecipientsContext = &TURecipientsContext;
 	}
 	
 	_searchResultsTableView = nil;
+    _searchingIndicatorView = nil;
 }
 
 - (void)_showTableView
@@ -259,7 +276,16 @@ static void *TURecipientsContext = &TURecipientsContext;
 		
 		self.searchResultsTableView.contentInset = contentInset;
 		self.searchResultsTableView.scrollIndicatorInsets = scrollIndicatorInsets;
+        
+        [self updateActivityIndicatorPlacement];
 	}
+}
+
+- (void)updateActivityIndicatorPlacement
+{
+    if (_searchingIndicatorView != nil && _searchResultsTableView != nil) {
+        _searchingIndicatorView.center = CGPointMake(_searchResultsTableView.bounds.size.width / 2 + _searchingIndicatorView.bounds.size.width / 2,  _searchingIndicatorView.bounds.size.height);
+    }
 }
 
 
@@ -364,10 +390,14 @@ static void *TURecipientsContext = &TURecipientsContext;
         
         __weak typeof(self) weakSelf = self;
         void (^reload)(void) = ^{
+            [weakSelf.searchingIndicatorView stopAnimating];
             [weakSelf.searchResultsTableView reloadData];
+            weakSelf.searchResultsTableView.userInteractionEnabled = YES;
         };
 		
 		if ([self.delegate respondsToSelector:@selector(recipientsDisplayController:shouldReloadTableForSearchString:completion:)]) {
+            [self.searchingIndicatorView startAnimating];
+            self.searchResultsTableView.userInteractionEnabled = NO;
             [self.delegate recipientsDisplayController:self shouldReloadTableForSearchString:searchText completion:reload];
         } else {
             reload();

@@ -70,6 +70,10 @@
  */
 @property (nonatomic, readonly, strong, nullable) UITableView *searchResultsTableView;
 
+/** Activity indicator used to show progress of search inside `searchResultsTableView`.
+ */
+@property (nonatomic, readonly, strong, nullable) UIActivityIndicatorView *searchingIndicatorView;
+
 /** The datasource for the `searchResultsTableView`
  
  You can display whatever content you want, but generally will show the search results filtered
