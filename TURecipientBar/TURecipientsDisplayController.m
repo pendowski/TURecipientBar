@@ -361,15 +361,18 @@ static void *TURecipientsContext = &TURecipientsContext;
 	
 	if (recipientsBar.text.length > 0 || _alwaysShowResults) {
 		[self _showTableView];
+        
+        __weak typeof(self) weakSelf = self;
+        void (^reload)(void) = ^{
+            [weakSelf.searchResultsTableView reloadData];
+        };
 		
-		BOOL should = YES;
-		if ([self.delegate respondsToSelector:@selector(recipientsDisplayController:shouldReloadTableForSearchString:)]) {
-			should = [self.delegate recipientsDisplayController:self shouldReloadTableForSearchString:searchText];
-		}
+		if ([self.delegate respondsToSelector:@selector(recipientsDisplayController:shouldReloadTableForSearchString:completion:)]) {
+            [self.delegate recipientsDisplayController:self shouldReloadTableForSearchString:searchText completion:reload];
+        } else {
+            reload();
+        }
 		
-		if (should) {
-			[_searchResultsTableView reloadData];
-		}
 	} else {
 		[self _hideTableView];
 	}

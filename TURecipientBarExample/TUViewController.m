@@ -73,7 +73,7 @@
 
 - (IBAction)addRecipient:(id)sender
 {
-    [self.recipientsBar addRecipient:[TURecipient recipientWithTitle:@"John Burke" address:nil]];
+    [self.recipientsBar addRecipient:[[TURecipient alloc] initWithTitle:@"John Burke" address:nil]];
 }
 
 - (IBAction)changeExpandedMode:(UISwitch *)sender
@@ -98,11 +98,10 @@
 	self.searchSource.tableView = tableView;
 }
 
-- (BOOL)recipientsDisplayController:(TURecipientsDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+- (void)recipientsDisplayController:(TURecipientsDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString completion:(nonnull void (^)(void))completion
 {
 	self.searchSource.searchTerm = searchString;
-	
-	return YES;
+    completion();
 }
 
 /*

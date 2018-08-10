@@ -242,9 +242,9 @@
  
  @param controller The recipients display controller for which the receiver is the delegate.
  @param searchString The string in the search bar.
- @return `YES` if the display controller should reload the data in its table view, otherwise `NO`.
+ @param completion Callback to be called when display controller should reload table.
  */
-- (BOOL)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller shouldReloadTableForSearchString:(nullable NSString *)searchString;
+- (void)recipientsDisplayController:(nonnull TURecipientsDisplayController *)controller shouldReloadTableForSearchString:(nullable NSString *)searchString completion:(nonnull void(^)(void))completion;
 
 
 /**---------------------------------------------------------------------------------------
