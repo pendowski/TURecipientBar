@@ -61,7 +61,7 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	return [_recipients copy];
 }
 
-- (UIControl *)_defaultRecipientViewForRecipient:(id<TURecipient>)recipient
+- (UIControl *)defaultViewForRecipient:(id<TURecipient>)recipient
 {
 	// we use TURecipientButton to check if we are using a custom view or should style the default
 	UIButton *recipientView = [TURecipientButton buttonWithType:UIButtonTypeCustom];
@@ -104,7 +104,7 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	}
 	
 	if (recipientView == nil) {
-		recipientView = [self _defaultRecipientViewForRecipient:recipient];
+		recipientView = [self defaultViewForRecipient:recipient];
 	}
 	
 	[recipientView addTarget:self action:@selector(selectRecipientButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -384,6 +384,14 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	[self.superview layoutIfNeeded];
 }
 
+- (BOOL)isEditingEnabled {
+	return self.textField.isEnabled;
+}
+
+- (void)setIsEditingEnabled:(BOOL)isEditingEnabled {
+	self.textField.enabled = isEditingEnabled;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	if ([keyPath isEqualToString:@"selectedTextRange"] && object == _textField) {
@@ -476,16 +484,12 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	[self addSubview:_textField];
 	[_textField addObserver:self forKeyPath:@"selectedTextRange" options:0 context:TURecipientsSelectionContext];
 	
-	
 	_summaryLabel = [[UILabel alloc] init];
 	_summaryLabel.backgroundColor = [UIColor clearColor];
 	_summaryLabel.font = [UIFont systemFontOfSize:15.0];
 	[self addSubview:_summaryLabel];
 	
-	
 	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(select:)]];
-	
-	
 	
 	[self _setNeedsRecipientLayout];
 }
@@ -931,7 +935,7 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 
 #pragma mark - UIAppearance
 
-+ (UIImage *)_defaultRecipientBackground
++ (UIImage *)defaultRecipientBackground
 {
 	static UIImage *background = nil;
 	if (background != nil) {
@@ -955,7 +959,7 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	return background;
 }
 
-+ (UIImage *)_defaultRecipientSelectedBackground
++ (UIImage *)defaultRecipientSelectedBackground
 {
 	static UIImage *background = nil;
 	if (background != nil) {
@@ -1003,9 +1007,9 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	
 	if (backgroundImage == nil) {
 		if (state == UIControlStateNormal) {
-			backgroundImage = [[self class] _defaultRecipientBackground];
+			backgroundImage = [[self class] defaultRecipientBackground];
 		} else if (state == UIControlStateHighlighted || state == UIControlStateSelected) {
-			backgroundImage = [[self class] _defaultRecipientSelectedBackground];
+			backgroundImage = [[self class] defaultRecipientSelectedBackground];
 		}
 	}
 	

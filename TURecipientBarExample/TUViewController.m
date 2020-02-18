@@ -13,7 +13,8 @@
 
 
 @interface TUViewController ()
-
+@property (nonatomic, weak) IBOutlet UISwitch *expandedSwitch;
+@property (nonatomic, weak) IBOutlet UISwitch *addButtonSwitch;
 @end
 
 @implementation TUViewController
@@ -76,10 +77,11 @@
     [self.recipientsBar addRecipient:[[TURecipient alloc] initWithTitle:@"John Burke" address:nil]];
 }
 
-- (IBAction)changeExpandedMode:(UISwitch *)sender
+- (IBAction)updateSwitch:(UISwitch *)sender
 {
 	[UIView animateWithDuration:0.2 animations:^{
-		self.recipientsBar.displayMode = sender.on ? TURecipientsBarDisplayModeExpanded : TURecipientsBarDisplayModeAutomatic;
+        self.recipientsBar.showsAddButton = self.addButtonSwitch.on;
+		self.recipientsBar.displayMode = self.expandedSwitch.on ? TURecipientsBarDisplayModeExpanded : TURecipientsBarDisplayModeAutomatic;
 	}];
 }
 
@@ -102,6 +104,10 @@
 {
 	self.searchSource.searchTerm = searchString;
     completion();
+}
+
+- (BOOL)recipientsBarShouldBeginEditing:(TURecipientsBar *)recipientsBar {
+    return NO;
 }
 
 /*

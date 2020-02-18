@@ -145,6 +145,8 @@ typedef NS_ENUM(NSInteger, TURecipientsBarDisplayMode) {
  */
 @property (nonatomic, weak, nullable) IBOutlet NSLayoutConstraint *heightConstraint;
 
+@property (nonatomic) BOOL isEditingEnabled;
+
 
 /**---------------------------------------------------------------------------------------
  * @name Delegate
@@ -279,6 +281,13 @@ typedef NS_ENUM(NSInteger, TURecipientsBarDisplayMode) {
  When set to true, the background will use a UIVisualEffectView for it's background that matches UINavigationBar. When set to false (the default) a plain white background is used. This is good for bars that are placed directly below the navigation bar without other entry fields. The messages app uses this style while the mail app does not.
  */
 @property (nonatomic) BOOL usesTransparency UI_APPEARANCE_SELECTOR;
+
+
+#pragma mark - Default implementations
+
+- (nullable UIControl *)defaultViewForRecipient:(nonnull id<TURecipient>)recipient;
++ (nonnull UIImage *)defaultRecipientBackground;
++ (nonnull UIImage *)defaultRecipientSelectedBackground;
 
 @end
 
