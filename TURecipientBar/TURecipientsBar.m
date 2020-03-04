@@ -682,7 +682,7 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	}
 }
 
-#pragma mark - Subclass injection points
+#pragma mark - Subclassing
 
 - (UIControl *)viewForRecipient:(id<TURecipient>)recipient
 {
@@ -707,6 +707,16 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	
 	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
 	[recipientView addGestureRecognizer:longPress];
+}
+
+- (nullable id<TURecipient>)recipientForView:(nonnull UIControl *)sender
+{
+	NSUInteger recipientIndex = [_recipientViews indexOfObject:sender];
+	
+	if (recipientIndex != NSNotFound && [_recipients count] > recipientIndex) {
+		return [_recipients objectAtIndex:recipientIndex];
+	}
+	return nil;
 }
 
 #pragma mark - Actions
@@ -741,11 +751,11 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	}
 	UIControl *sender = (UIControl *)recongnizer.view; // Basically just go get rid of Xcode warning
 	if (sender == nil) { return ; }
-	NSUInteger recipientIndex = [_recipientViews indexOfObject:sender];
+	id<TURecipient> recipient = [self recipientForView:sender];
 	
-	if (recipientIndex != NSNotFound && [_recipients count] > recipientIndex) {
-		self.selectedRecipient = [_recipients objectAtIndex:recipientIndex];
-		[self.recipientsBarDelegate recipientsBar:self didRequestDetailsOfRecipient:self.selectedRecipient sender:sender];
+	if (recipient) {
+		self.selectedRecipient = recipient;
+		[self.recipientsBarDelegate recipientsBar:self didRequestDetailsOfRecipient:recipient sender:sender];
 	}
 }
 
