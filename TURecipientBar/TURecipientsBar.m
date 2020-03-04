@@ -98,9 +98,10 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	
 	
 	UIControl *recipientView = [self viewForRecipient:recipient];
-	[self installRecipientViewInteractions:recipientView];
-	
-	[self addSubview:recipientView];
+	if (recipientView) {
+		[self installRecipientViewInteractions:recipientView];
+		[self addSubview:recipientView];
+	}
 	
 	[self _setNeedsRecipientLayout];
 	if (self.animatedRecipientsInAndOut) {
