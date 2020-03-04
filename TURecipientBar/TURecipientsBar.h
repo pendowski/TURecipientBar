@@ -287,7 +287,7 @@ typedef NS_ENUM(NSInteger, TURecipientsBarDisplayMode) {
 @interface TURecipientsBar (Subclass)
 - (nullable UIControl *)defaultViewForRecipient:(nonnull id<TURecipient>)recipient;
 - (nullable UIControl *)viewForRecipient:(nonnull id<TURecipient>)recipient;
-- (void)installRecipientViewInteractions:(UIControl *)recipientView;
+- (void)installRecipientViewInteractions:(nonnull UIControl *)recipientView;
 
 + (nonnull UIImage *)defaultRecipientBackground;
 + (nonnull UIImage *)defaultRecipientSelectedBackground;
