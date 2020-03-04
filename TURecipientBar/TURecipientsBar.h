@@ -282,13 +282,14 @@ typedef NS_ENUM(NSInteger, TURecipientsBarDisplayMode) {
  */
 @property (nonatomic) BOOL usesTransparency UI_APPEARANCE_SELECTOR;
 
+@end
 
-#pragma mark - Default implementations
-
+@interface TURecipientsBar (Subclass)
 - (nullable UIControl *)defaultViewForRecipient:(nonnull id<TURecipient>)recipient;
+- (nullable UIControl *)viewForRecipient:(nonnull id<TURecipient>)recipient;
+
 + (nonnull UIImage *)defaultRecipientBackground;
 + (nonnull UIImage *)defaultRecipientSelectedBackground;
-
 @end
 
 

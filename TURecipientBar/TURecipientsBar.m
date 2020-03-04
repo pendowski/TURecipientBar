@@ -97,24 +97,8 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	[self didChange:NSKeyValueChangeInsertion valuesAtIndexes:changedIndex forKey:@"recipients"];
 	
 	
-	UIControl *recipientView;
-	
-	if ([self.recipientsBarDelegate respondsToSelector:@selector(recipientsBar:viewForRecipient:)]) {
-		recipientView = [self.recipientsBarDelegate recipientsBar:self viewForRecipient:recipient];
-	}
-	
-	if (recipientView == nil) {
-		recipientView = [self defaultViewForRecipient:recipient];
-	}
-	
-	[recipientView addTarget:self action:@selector(selectRecipientButton:) forControlEvents:UIControlEventTouchUpInside];
-	
-	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
-	doubleTap.numberOfTapsRequired = 2;
-	[recipientView addGestureRecognizer:doubleTap];
-	
-	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
-	[recipientView addGestureRecognizer:longPress];
+	UIControl *recipientView = [self viewForRecipient:recipient];
+	[self installRecipientViewInteractions:recipientView];
 	
 	[self addSubview:recipientView];
 	
@@ -697,6 +681,32 @@ void *TURecipientsSelectionContext = &TURecipientsSelectionContext;
 	}
 }
 
+#pragma mark - Subclass injection points
+
+- (UIControl *)viewForRecipient:(id<TURecipient>)recipient
+{
+	UIControl *recipientView;
+	if ([self.recipientsBarDelegate respondsToSelector:@selector(recipientsBar:viewForRecipient:)]) {
+		recipientView = [self.recipientsBarDelegate recipientsBar:self viewForRecipient:recipient];
+	}
+	
+	if (recipientView == nil) {
+		recipientView = [self defaultViewForRecipient:recipient];
+	}
+	return recipientView;
+}
+
+- (void)installRecipientViewInteractions:(UIControl *)recipientView
+{
+	[recipientView addTarget:self action:@selector(selectRecipientButton:) forControlEvents:UIControlEventTouchUpInside];
+	
+	UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
+	doubleTap.numberOfTapsRequired = 2;
+	[recipientView addGestureRecognizer:doubleTap];
+	
+	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestedRecepientsDetails:)];
+	[recipientView addGestureRecognizer:longPress];
+}
 
 #pragma mark - Actions
 
